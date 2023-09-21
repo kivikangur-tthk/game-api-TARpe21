@@ -1,0 +1,176 @@
+openapi: 3.0.2
+info:
+    title: Games-API
+    version: 1.0.0
+    description: |-
+        ### This is a Swagger UI for our Games API  
+
+        ### Error handlingErrors are presented using the HTTP status codes 400-599.
+
+        The response include a more detailed explanation about the error in the body.
+
+        ```{  "error": "Cleartext explanation of the error that occurred"}```
+        ### Generic API errors
+
+        These error responses can be returned by any of the described endpoints.
+        | HTTP status  |  Description |
+        |---|---|
+        | 400| Bad input parameters or invalid request. More information can be found in the response body.
+        | 401| The consumer does not have access to the requested resource or the provided token is not valid.
+        | 404| The requested resource can not be found or the user does not have access to the resource.
+        | 5XX| A server error has occurred while processing the request.
+paths:
+    /games:
+        summary: Get a list of all games
+        description: Returns a list of all games in API
+        get:
+            tags:
+                - games
+            responses:
+                '200':
+                    content:
+                        application/json:
+                            schema:
+                                type: array
+                                items:
+                                    type: string
+                            examples:
+                                List of games:
+                                    value:
+                                        - Witcher 3
+                                        - Cyberpunk 2077
+                    description: Returns a list of games
+            summary: Get a list of all games
+            description: Returns a list of all games in API
+        post:
+            requestBody:
+                description: A new game to be created
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/new-game'
+                required: true
+            tags:
+                - new-game
+            responses:
+                '201':
+                    content:
+                        new-game:
+                            schema:
+                                $ref: '#/components/schemas/new-game'
+                    description: |
+                        Game was successfuly added
+                '400':
+                    content:
+                        Error:
+                            schema:
+                                $ref: '#/components/schemas/Error'
+                            examples:
+                                Missing params:
+                                    value:
+                                        error: One or all params are missing
+                    description: One or more params are missing
+            summary: Create a game
+            description: Add new game to games
+    '/games/{id}':
+        get:
+            tags:
+                - details
+            parameters:
+                -
+                    name: id
+                    description: ID of game
+                    schema:
+                        type: string
+                    in: path
+                    required: true
+            responses:
+                '200':
+                    content:
+                        application/json:
+                            schema:
+                                type: array
+                                items:
+                                    type: string
+                            examples:
+                                Single game full details:
+                                    value:
+                                        id: 3
+                                        name: Minecraft
+                                        price: 29.99
+                    description: Full details of a game with the given id
+                '400':
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error'
+                    description: |
+                        Invalid request data
+                '404':
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error'
+                    description: Game not found
+            deprecated: false
+            operationId: id
+            summary: Get full details of a game
+            description: Returns full details of a game with the given id
+        delete:
+            parameters:
+                -
+                    name: id
+                    description: ID if game to be deleted
+                    schema:
+                        type: string
+                    in: path
+                    required: true
+            responses:
+                '204':
+                    description: Game deleted successfuly
+                '404':
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error'
+                            examples:
+                                Not found:
+                                    value:
+                                        error: Game not found
+                    description: Game not found
+            summary: Remove game with the given Id
+components:
+    schemas:
+        Error:
+            title: Root Type for Error
+            description: Error message
+            type: object
+            properties:
+                error:
+                    type: string
+            example:
+                error: Error message.
+        new-game:
+            title: Root Type for new-game
+            description: ''
+            required:
+                - price
+                - name
+            type: object
+            properties:
+                name:
+                    type: string
+                price:
+                    format: float
+                    type: number
+            example:
+                name: some text
+                price: 96.07
+    securitySchemes:
+        bearerAuth:            # arbitrary name for the security scheme
+            type: http
+            scheme: bearer
+            bearerFormat: JWT    # optional, arbitrary value for documentation purposes
+# 2) Apply the security globally to all operations
+security:
+    - bearerAuth: []   
