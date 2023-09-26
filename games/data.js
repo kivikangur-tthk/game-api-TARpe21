@@ -7,5 +7,5 @@ let data = [
 ]
 
 exports.getAll = () => {
-    return data
+    return data.map(g => { return { "id": g.id, "name": g.name } })
 }
