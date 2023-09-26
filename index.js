@@ -10,7 +10,7 @@ app.use("/docs", swaggerui.serve, swaggerui.setup(swaggerDocument))
 app.get("/games", (req, res) => {
     res.send(games.getAll())
 })
-})
+
 
 app.listen(port, () => {
     console.log(`API up at: http://localhost:${port}`);
