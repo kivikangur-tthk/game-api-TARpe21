@@ -10,6 +10,9 @@ app.use("/docs", swaggerui.serve, swaggerui.setup(swaggerDocument))
 app.get("/games", (req, res) => {
     res.send(games.getAll())
 })
+
+app.get("/games/:id", (req, res) => {
+    res.send(games.getById(req.params.id))
 })
 
 app.listen(port, () => {
