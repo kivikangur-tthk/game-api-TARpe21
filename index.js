@@ -52,6 +52,17 @@ app.get("/players/:id", (req, res) => {
     res.send(foundPlayer)
 })
 
+app.post("/players", (req, res) => {
+    if (!req.body.name) {
+        return res.status(400).send({ error: "Required parameter 'name' is missing" })
+    }
+    const createdPlayer = players.create({
+        name: req.body.name
+    })
+    res.status(201)
+        .location(`${getBaseurl(req)}/players/${createdPlayer.id}`)
+        .send(createdPlayer)
+})
 app.listen(port, () => {
     console.log(`API up at: http://localhost:${port}`);
 })
