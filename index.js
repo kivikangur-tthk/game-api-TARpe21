@@ -23,12 +23,22 @@ app.get("/games/:id", (req, res) => {
 })
 
 app.post("/games", (req, res) => {
-    games.create({
+    if (!req.body.name || !req.body.price) {
+        return res.status(400).send({ error: "One or all required parameters are missing" })
+    }
+    const createdGame = games.create({
         name: req.body.name,
         price: req.body.price
     })
-    res.end()
+    res.status(201)
+        .location(`${getBaseurl(req)}/games/${createdGame.id}`)
+        .send(createdGame)
 })
+
+function getBaseurl(request) {
+    return (request.connection && request.connection.encrypted ? "https" : "http")
+        + "://" + request.headers.host
+}
 
 app.get("/players", (req, res) => {
     res.send(players.getAll())
