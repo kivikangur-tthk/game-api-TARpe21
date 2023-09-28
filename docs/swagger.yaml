@@ -82,6 +82,65 @@ paths:
                     type: integer
                 in: path
                 required: true
+    /players:
+        get:
+            tags:
+                - players
+            responses:
+                '200':
+                    content:
+                        application/json:
+                            schema:
+                                type: array
+                                items:
+                                    $ref: '#/components/schemas/player'
+                            examples:
+                                Players:
+                                    value:
+                                        -
+                                            id: 2
+                                            name: some text
+                                            playTime: 53
+                                        -
+                                            id: 10
+                                            name: some text
+                                            playTime: 55
+                    description: |
+                        Successful
+            summary: Get all players
+    '/players/{id}':
+        get:
+            tags:
+                - players
+            responses:
+                '200':
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/player'
+                            examples:
+                                Single player:
+                                    value:
+                                        id: 13
+                                        name: some text
+                                        playTime: 63
+                    description: Successful
+                '404':
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/error'
+                            examples:
+                                Player not found:
+                                    value:
+                                        error: Player not found
+                    description: Player not found
+            summary: Get by Id
+        parameters:
+            -
+                name: id
+                in: path
+                required: true
 components:
     schemas:
         error:
@@ -110,3 +169,20 @@ components:
                 id: 3
                 name: Minecraft
                 price: 26.99
+        player:
+            title: Root Type for player
+            description: ''
+            type: object
+            properties:
+                id:
+                    format: int32
+                    type: integer
+                name:
+                    type: string
+                playTime:
+                    format: int32
+                    type: integer
+            example:
+                id: 5
+                name: Tabatha
+                playTime: 0
