@@ -1,0 +1,112 @@
+openapi: 3.0.2
+info:
+    title: TARpe21_Games
+    version: 1.0.0
+    description: |-
+        ### This is a Swagger UI for our Games API  
+
+        ### Error handlingErrors are presented using the HTTP status codes 400-599.
+
+        The response include a more detailed explanation about the error in the body.
+
+        ```{  "error": "Cleartext explanation of the error that occurred"}```
+        ### Generic API errors
+
+        These error responses can be returned by any of the described endpoints.
+        | HTTP status  |  Description |
+        |---|---|
+        | 400| Bad input parameters or invalid request. More information can be found in the response body.
+        | 401| The consumer does not have access to the requested resource or the provided token is not valid.
+        | 404| The requested resource can not be found or the user does not have access to the resource.
+        | 5XX| A server error has occurred while processing the request.
+paths:
+    /games:
+        get:
+            tags:
+                - games
+            responses:
+                '200':
+                    content:
+                        application/json:
+                            examples:
+                                Empty Array:
+                                    value: []
+                                List Of Games:
+                                    value:
+                                        -
+                                            id: 1
+                                            name: Game name
+                                        -
+                                            id: 5
+                                            name: Another game
+                    description: 'Successful '
+            summary: Get all games
+    '/games/{id}':
+        summary: Handle single game by its id
+        get:
+            tags:
+                - games
+            responses:
+                '200':
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/game'
+                            examples:
+                                Single Game:
+                                    value:
+                                        id: 33
+                                        name: Game name
+                                        price: 50.89
+                    description: Successful
+                '404':
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/error'
+                            examples:
+                                error:
+                                    value:
+                                        error: Game not found
+                    description: Game was not found
+            summary: Get by Id
+        parameters:
+            -
+                examples:
+                    Small:
+                        value: '6'
+                name: id
+                description: |
+                    Identificator for the game
+                schema:
+                    type: integer
+                in: path
+                required: true
+components:
+    schemas:
+        error:
+            title: Root Type for error
+            description: ''
+            type: object
+            properties:
+                error:
+                    type: string
+            example:
+                error: Error message.
+        game:
+            title: Root Type for game
+            description: ''
+            type: object
+            properties:
+                id:
+                    format: int32
+                    type: integer
+                name:
+                    type: string
+                price:
+                    format: double
+                    type: number
+            example:
+                id: 3
+                name: Minecraft
+                price: 26.99
