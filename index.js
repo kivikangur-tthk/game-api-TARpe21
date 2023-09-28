@@ -12,7 +12,11 @@ app.get("/games", (req, res) => {
 })
 
 app.get("/games/:id", (req, res) => {
-    res.send(games.getById(req.params.id))
+    const foundGame = games.getById(req.params.id)
+    if (foundGame === undefined) {
+        return res.status(404).send({ error: `Game not found` })
+    }
+    res.send(foundGame)
 })
 
 app.listen(port, () => {
