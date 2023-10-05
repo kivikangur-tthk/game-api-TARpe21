@@ -70,6 +70,20 @@ paths:
                                         error: Game not found
                     description: Game was not found
             summary: Get by Id
+        delete:
+            responses:
+                '204':
+                    description: Succeeded
+                '404':
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/error'
+                            examples:
+                                NotFound:
+                                    value:
+                                        error: Game not found
+                    description: Game not found
         parameters:
             -
                 examples:

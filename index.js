@@ -10,18 +10,8 @@ const players = require("./players/data")
 app.use(express.json())
 app.use("/docs", swaggerui.serve, swaggerui.setup(swaggerDocument))
 
-app.get("/games", (req, res) => {
-    res.send(games.getAll())
-})
 
-app.get("/games/:id", (req, res) => {
-    const foundGame = games.getById(req.params.id)
-    if (foundGame === undefined) {
-        return res.status(404).send({ error: `Game not found` })
-    }
-    res.send(foundGame)
-})
-
+// CREATE
 app.post("/games", (req, res) => {
     if (!req.body.name || !req.body.price) {
         return res.status(400).send({ error: "One or all required parameters are missing" })
@@ -34,6 +24,27 @@ app.post("/games", (req, res) => {
         .location(`${getBaseurl(req)}/games/${createdGame.id}`)
         .send(createdGame)
 })
+// READ
+app.get("/games", (req, res) => {
+    res.send(games.getAll())
+})
+app.get("/games/:id", (req, res) => {
+    const foundGame = games.getById(req.params.id)
+    if (foundGame === undefined) {
+        return res.status(404).send({ error: `Game not found` })
+    }
+    res.send(foundGame)
+})
+// UPDATE
+
+// DELETE
+app.delete("/games/:id", (req, res) => {
+    if (games.delete(req.params.id) === undefined) {
+        return res.status(404).send({ error: "Game not found" })
+    }
+    res.status(204).send()
+})
+
 
 function getBaseurl(request) {
     return (request.connection && request.connection.encrypted ? "https" : "http")
