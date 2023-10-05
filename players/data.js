@@ -18,3 +18,20 @@ exports.create = (newPlayer) => {
     data.push(newPlayer)
     return newPlayer
 }
+exports.edit = (modifiedPlayer) => {
+    var toBeUpdated = this.getById(modifiedPlayer.id)
+    if (toBeUpdated === undefined) {
+        return
+    }
+    updatedPlayer = { ...toBeUpdated, ...modifiedPlayer }
+    return updatedPlayer
+}
+
+exports.delete = (id) => {
+    var toBeDeleted = this.getById(id)
+    if (toBeDeleted === undefined) {
+        return
+    }
+    data = data.filter((e) => toBeDeleted.id != e.id)
+    return toBeDeleted
+}

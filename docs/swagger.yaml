@@ -41,6 +41,35 @@ paths:
                                             name: Another game
                     description: 'Successful '
             summary: Get all games
+        post:
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/game'
+                        examples:
+                            NewGame:
+                                value:
+                                    name: some text
+                                    price: 76.33
+                required: true
+            tags:
+                - games
+            responses:
+                '201':
+                    headers:
+                        location: {}
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/game'
+                            examples:
+                                CreatedGame:
+                                    value:
+                                        id: 3
+                                        name: some text
+                                        price: 83.18
+                    description: Success
     '/games/{id}':
         summary: Handle single game by its id
         get:
@@ -71,6 +100,8 @@ paths:
                     description: Game was not found
             summary: Get by Id
         delete:
+            tags:
+                - games
             responses:
                 '204':
                     description: Succeeded
