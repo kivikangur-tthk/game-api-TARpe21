@@ -17,22 +17,35 @@ exports.createNew = async (req, res) => {
 // READ
 exports.getAll = async (req, res) => {
     const result = await games.findAll({ attributes: ["id", "name"] })
-    res.send(JSON.stringify(result))
+    res.json(result)
 }
-exports.getById = (req, res) => {
-    const foundGame = games.getById(req.params.id)
-    if (foundGame === undefined) {
+exports.getById = async (req, res) => {
+    const foundGame = await games.findByPk(req.params.id)
+    if (foundGame === null) {
         return res.status(404).send({ error: `Game not found` })
     }
-    res.send(foundGame)
+    res.json(foundGame)
 }
 // UPDATE
-exports.editById = (req, res) => {
-
+exports.editById = async (req, res) => {
+    console.log("Update:", req.params, req.body);
+    const updateResult = await games.update({ ...req.body }, {
+        where: { id: req.params.id },
+        fields: ["name", "price"]
+    })
+    if (updateResult[0] == 0) {
+        return res.status(404).send({ "error": "game not found" })
+    }
+    res.status(204)
+        .location(`${getBaseurl(req)}/games/${req.params.id}`)
+        .send()
 }
 // DELETE
-exports.deleteById = (req, res) => {
-    if (games.delete(req.params.id) === undefined) {
+exports.deleteById = async (req, res) => {
+    const deletedAmount = await games.destroy({
+        where: { id: req.params.id }
+    })
+    if (deletedAmount === 0) {
         return res.status(404).send({ error: "Game not found" })
     }
     res.status(204).send()
