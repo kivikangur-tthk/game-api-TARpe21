@@ -99,6 +99,38 @@ paths:
                                         error: Game not found
                     description: Game was not found
             summary: Get by Id
+        put:
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/game'
+                        examples:
+                            Updated game:
+                                value:
+                                    id: 40
+                                    name: New name
+                                    price: 32.71
+                required: true
+            tags:
+                - games
+            responses:
+                '204':
+                    headers:
+                        location:
+                            schema:
+                                type: string
+                    description: Success
+                '404':
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/error'
+                            examples:
+                                Not found:
+                                    value:
+                                        error: game not found
+                    description: Not found
         delete:
             tags:
                 - games
