@@ -28,13 +28,12 @@ exports.getById = async (req, res) => {
 }
 // UPDATE
 exports.editById = async (req, res) => {
-    console.log("Update:", req.params, req.body);
     const updateResult = await games.update({ ...req.body }, {
         where: { id: req.params.id },
         fields: ["name", "price"]
     })
     if (updateResult[0] == 0) {
-        return res.status(404).send({ "error": "game not found" })
+        return res.status(404).send({ error: "Game not found" })
     }
     res.status(204)
         .location(`${getBaseurl(req)}/games/${req.params.id}`)

@@ -5,7 +5,7 @@ const sequelize = new Sequelize(process.env.DATABASE, process.env.DB_USER, proce
     define: {
         timestamps: true
     },
-    logging: console.log
+    logging: false // console.log
 })
 try {
     sequelize.authenticate().then(() => {
@@ -18,10 +18,11 @@ const db = {}
 db.Sequelize = Sequelize
 db.connection = sequelize
 db.games = require("./models/Game")(sequelize, Sequelize)
+db.players = require("./models/Player")(sequelize, Sequelize)
 
 sync = async () => {
-    await sequelize.sync({ force: true }) // Erase all and recreate
-    //await sequelize.sync({alter:true}) // Alter existing to match the model
+    //await sequelize.sync({ force: true }) // Erase all and recreate
+    await sequelize.sync({ alter: true }) // Alter existing to match the model
 }
 
 module.exports = { db, sync }
