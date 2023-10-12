@@ -160,6 +160,10 @@ paths:
                 in: path
                 required: true
     /players:
+        summary: Path used to manage the list of players.
+        description: >-
+            The REST endpoint/path used to list and create zero or more `Player` entities.  This path contains
+            a `GET` and `POST` operation to perform the list and create tasks, respectively.
         get:
             tags:
                 - players
@@ -170,22 +174,33 @@ paths:
                             schema:
                                 type: array
                                 items:
-                                    $ref: '#/components/schemas/player'
-                            examples:
-                                Players:
-                                    value:
-                                        -
-                                            id: 2
-                                            name: some text
-                                            playTime: 53
-                                        -
-                                            id: 10
-                                            name: some text
-                                            playTime: 55
-                    description: |
-                        Successful
-            summary: Get all players
-    '/players/{id}':
+                                    $ref: '#/components/schemas/Player'
+                    description: Successful response - returns an array of `Player` entities.
+            operationId: getPlayers
+            summary: List All Players
+            description: Gets a list of all `Player` entities.
+        post:
+            requestBody:
+                description: A new `Player` to be created.
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/Player'
+                required: true
+            tags:
+                - players
+            responses:
+                '201':
+                    description: Successful response.
+            operationId: createPlayer
+            summary: Create a Player
+            description: Creates a new instance of a `Player`.
+    '/players/{playerId}':
+        summary: Path used to manage a single Player.
+        description: >-
+            The REST endpoint/path used to get, update, and delete single instances of an `Player`.  This path
+            contains `GET`, `PUT`, and `DELETE` operations used to perform the get, update, and delete tasks,
+            respectively.
         get:
             tags:
                 - players
@@ -194,28 +209,79 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/player'
-                            examples:
-                                Single player:
-                                    value:
-                                        id: 13
-                                        name: some text
-                                        playTime: 63
-                    description: Successful
+                                $ref: '#/components/schemas/Player'
+                    description: Successful response - returns a single `Player`.
                 '404':
                     content:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/error'
                             examples:
-                                Player not found:
+                                Not Found:
                                     value:
                                         error: Player not found
-                    description: Player not found
-            summary: Get by Id
+                    description: Not found
+            operationId: getPlayer
+            summary: Get a Player
+            description: Gets the details of a single instance of a `Player`.
+        put:
+            requestBody:
+                description: Updated `Player` information.
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/Player'
+                required: true
+            tags:
+                - players
+            responses:
+                '202':
+                    headers:
+                        location:
+                            schema:
+                                type: string
+                            examples:
+                                Location:
+                                    value: 'http://localhost:8080/players/4'
+                    description: Successful response.
+                '404':
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/error'
+                            examples:
+                                Not found:
+                                    value:
+                                        error: Player not found
+                    description: Not found
+            operationId: updatePlayer
+            summary: Update a Player
+            description: Updates an existing `Player`.
+        delete:
+            tags:
+                - players
+            responses:
+                '204':
+                    description: Successful response.
+                '404':
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/error'
+                            examples:
+                                Not found:
+                                    value:
+                                        error: Player not found
+                    description: Not found
+            operationId: deletePlayer
+            summary: Delete a Player
+            description: Deletes an existing `Player`.
         parameters:
             -
-                name: id
+                name: playerId
+                description: A unique identifier for a `Player`.
+                schema:
+                    type: string
                 in: path
                 required: true
 components:
@@ -246,9 +312,9 @@ components:
                 id: 3
                 name: Minecraft
                 price: 26.99
-        player:
-            title: Root Type for player
-            description: ''
+        Player:
+            title: Root Type for Player
+            description: Player data
             type: object
             properties:
                 id:
@@ -257,9 +323,9 @@ components:
                 name:
                     type: string
                 playTime:
-                    format: int32
-                    type: integer
+                    format: double
+                    type: number
             example:
-                id: 5
-                name: Tabatha
-                playTime: 0
+                id: 1
+                name: Kristjan
+                playTime: 5.55
