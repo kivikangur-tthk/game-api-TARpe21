@@ -1,22 +1,23 @@
-const games = require("../games/data")
+const { db } = require("../db")
+const games = db.games
 const { getBaseurl } = require("./helpers")
 
 // CREATE
-exports.createNew = (req, res) => {
+exports.createNew = async (req, res) => {
     if (!req.body.name || !req.body.price) {
         return res.status(400).send({ error: "One or all required parameters are missing" })
     }
-    const createdGame = games.create({
-        name: req.body.name,
-        price: req.body.price
+    const createdGame = await games.create(req.body, {
+        fields: ["name", "price"]
     })
     res.status(201)
         .location(`${getBaseurl(req)}/games/${createdGame.id}`)
-        .send(createdGame)
+        .json(createdGame)
 }
 // READ
-exports.getAll = (req, res) => {
-    res.send(games.getAll())
+exports.getAll = async (req, res) => {
+    const result = await games.findAll({ attributes: ["id", "name"] })
+    res.send(JSON.stringify(result))
 }
 exports.getById = (req, res) => {
     const foundGame = games.getById(req.params.id)
