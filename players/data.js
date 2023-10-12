@@ -12,3 +12,26 @@ exports.getAll = () => {
 exports.getById = (id) => {
     return data.find((thing) => thing.id == parseInt(id))
 }
+exports.create = (newPlayer) => {
+    const newId = Math.max(...data.map((thing) => thing.id)) + 1
+    newPlayer.id = newId
+    data.push(newPlayer)
+    return newPlayer
+}
+exports.edit = (modifiedPlayer) => {
+    var toBeUpdated = this.getById(modifiedPlayer.id)
+    if (toBeUpdated === undefined) {
+        return
+    }
+    updatedPlayer = { ...toBeUpdated, ...modifiedPlayer }
+    return updatedPlayer
+}
+
+exports.delete = (id) => {
+    var toBeDeleted = this.getById(id)
+    if (toBeDeleted === undefined) {
+        return
+    }
+    data = data.filter((e) => toBeDeleted.id != e.id)
+    return toBeDeleted
+}

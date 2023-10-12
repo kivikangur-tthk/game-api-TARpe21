@@ -12,3 +12,17 @@ exports.getAll = () => {
 exports.getById = (id) => {
     return data.find((thing) => thing.id == parseInt(id))
 }
+exports.create = (newGame) => {
+    const newId = Math.max(...data.map((thing) => thing.id)) + 1
+    newGame.id = newId
+    data.push(newGame)
+    return newGame
+}
+exports.delete = (id) => {
+    var toBeDeleted = this.getById(id)
+    if (toBeDeleted === undefined) {
+        return
+    }
+    data = data.filter((e) => toBeDeleted.id != e.id)
+    return toBeDeleted
+}
