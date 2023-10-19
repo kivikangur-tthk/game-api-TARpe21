@@ -1,0 +1,10 @@
+const gamePlayController = require("../controllers/GamePlaysController.js")
+module.exports = (app) => {
+    app.route("/gameplays")
+        .get(gamePlayController.getAll)
+        .post(gamePlayController.createNew)      // Create
+    app.route("/gameplays/:id")
+        .get(gamePlayController.getById)         // Read
+        .put(gamePlayController.editById)        // Update
+        .delete(gamePlayController.deleteById)   // Delete
+}

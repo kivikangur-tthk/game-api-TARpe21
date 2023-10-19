@@ -19,6 +19,15 @@ db.Sequelize = Sequelize
 db.connection = sequelize
 db.games = require("./models/Game")(sequelize, Sequelize)
 db.players = require("./models/Player")(sequelize, Sequelize)
+db.gamePlays = require("./models/GamePlay")(sequelize, Sequelize, db.games, db.players)
+
+db.games.belongsToMany(db.players, { through: db.gamePlays })
+db.players.belongsToMany(db.games, { through: db.gamePlays })
+db.games.hasMany(db.gamePlays)
+db.players.hasMany(db.gamePlays)
+db.gamePlays.belongsTo(db.games)
+db.gamePlays.belongsTo(db.players)
+
 
 sync = async () => {
     //await sequelize.sync({ force: true }) // Erase all and recreate

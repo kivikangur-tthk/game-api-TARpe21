@@ -1,0 +1,30 @@
+module.exports = (dbConnection, Sequelize, Game, Player) => {
+    const GamePlay = dbConnection.define("GamePlay", {
+        id: {
+            type: Sequelize.INTEGER,
+            primaryKey: true,
+            autoIncrement: true
+        },
+        playtime: {
+            type: Sequelize.INTEGER,
+            allowNull: false
+        },
+        GameId: {
+            type: Sequelize.INTEGER,
+            allowNull: false,
+            references: {
+                model: Game,
+                key: "id"
+            }
+        },
+        PlayerId: {
+            type: Sequelize.INTEGER,
+            allowNull: false,
+            references: {
+                model: Player,
+                key: "id"
+            }
+        }
+    })
+    return GamePlay
+}
