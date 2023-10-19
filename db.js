@@ -30,8 +30,49 @@ db.gamePlays.belongsTo(db.players)
 
 
 sync = async () => {
-    //await sequelize.sync({ force: true }) // Erase all and recreate
-    await sequelize.sync({ alter: true }) // Alter existing to match the model
+    if (process.env.DROP_DB) {
+        console.log("Begin DROP")
+        await db.connection.query('SET FOREIGN_KEY_CHECKS = 0')
+        console.log("Checks disabled")
+        await db.connection.sync({ force: true })
+        console.log('Database synchronised.');
+        await db.connection.query('SET FOREIGN_KEY_CHECKS = 1')
+        console.log("Checks enabled")
+
+        const [game, createdG] = await db.games.findOrCreate({
+            where: {
+                name: "Minecraft"
+            },
+            defaults: {
+                name: "Minecraft",
+                price: 30,
+            }
+        })
+        console.log("game created: ", createdG)
+        const [player, createdP] = await db.players.findOrCreate({
+            where: {
+                name: "Kristjan Kivikangur"
+            },
+            defaults: {
+                name: "Kristjan Kivikangur"
+            }
+        })
+        console.log("player created: ", createdP)
+        const [gamePlay, createdGP] = await db.gamePlays.findOrCreate({
+            where: {
+                id: 1
+            },
+            defaults: {
+                PlayerId: player.id,
+                GameId: game.id,
+                playtime: 55
+            }
+        })
+        console.log("gamePlay created: ", createdGP)
+    }
+    else {
+        await db.connection.sync({ alter: true }) // Alter existing to match the model
+    }
 }
 
 module.exports = { db, sync }
