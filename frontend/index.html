@@ -30,14 +30,11 @@
         const app = Vue.createApp({
             data() {
                 return {
-                    games: [
-                        { id: 1, name: "Witcher 3", price: 29.99 },
-                        { id: 2, name: "Cyberpunk 2077", price: 59.99 },
-                        { id: 3, name: "Minecraft", price: 26.99 },
-                        { id: 4, name: "Counter-Strike: Global Offencive", price: 0 },
-                        { id: 5, name: "Roblox", price: 0 }
-                    ]
+                    games: []
                 }
+            },
+            async created() {
+                this.games = await (await fetch("http://localhost:8080/games")).json()
             }
         })
 
