@@ -55,28 +55,7 @@
         integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
         crossorigin="anonymous"></script>
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
-    <script>
-        const app = Vue.createApp({
-            data() {
-                return {
-                    gameInModal: { id: null, name: null, price: null },
-                    games: []
-                }
-            },
-            async created() {
-                this.games = await (await fetch("http://localhost:8080/games")).json()
-            },
-            methods: {
-                getGame: async function (id) {
-                    this.gameInModal = await (await fetch("http://localhost:8080/games/" + id)).json()
-                    let gameInfoModal = new bootstrap.Modal(document.getElementById("gameInfoModal"))
-                    gameInfoModal.show()
-                }
-            }
-        })
-
-        app.mount('#app')
-    </script>
+    <script src="rest-client.js"></script>
 </body>
 
 </html>
