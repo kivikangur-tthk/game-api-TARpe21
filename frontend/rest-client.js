@@ -1,8 +1,14 @@
-const app = Vue.createApp({
+import { createApp } from 'https://unpkg.com/vue@3/dist/vue.esm-browser.js'
+import ChildComp from './ChildComp.js'
+const app = createApp({
+    components: {
+        ChildComp
+    },
     data() {
         return {
             gameInModal: { id: null, name: null, price: null },
-            games: []
+            games: [],
+            childMsg: 'No child msg yet'
         }
     },
     async created() {
