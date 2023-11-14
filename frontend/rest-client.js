@@ -1,6 +1,8 @@
-import { createApp } from 'https://unpkg.com/vue@3/dist/vue.esm-browser.js'
+import { createApp } from 'vue'
 import ChildComp from './ChildComp.js'
-const app = createApp({
+import App from './components/App.js'
+const app = createApp(App)
+createApp({
     components: {
         ChildComp
     },
