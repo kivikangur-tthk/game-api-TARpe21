@@ -12,12 +12,7 @@ export default {
         </tr>
     </table>
     `,
-    emits: {
-        showModal: (game) => {
-            console.log("Validation", game)
-            return game.id && game.name && game.price
-        }
-    },
+    emits: ["showModal"],
     data() {
         return {
             games: []
@@ -28,8 +23,7 @@ export default {
     },
     methods: {
         getGame: async function (id) {
-            const gameInModal = await (await fetch("http://localhost:8080/games/" + id)).json()
-            console.log("GamesList: ", gameInModal)
+            const gameInModal = await (await fetch(this.API_URL + "/games/" + id)).json()
             this.$emit("showModal", gameInModal)
         }
     }

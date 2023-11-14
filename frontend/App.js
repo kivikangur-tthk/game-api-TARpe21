@@ -1,10 +1,10 @@
-import gamesList from "./GamesList.js"
-import gameInfoModal from "./GameInfoModal.js"
+import gamesList from "./components/GamesList.js"
+import gameInfoModal from "./components/GameInfoModal.js"
 export default {
     /*html*/
     template: `
-    <games-list @showModal="openModal"></games-list>
-    <game-info-modal :gameInModal="gameInModal"></game-info-modal>
+    <games-list :key="update" @showModal="openModal"></games-list>
+    <game-info-modal @gameUpdated="updateView" :gameInModal="gameInModal"></game-info-modal>
     `,
     components: {
         gamesList,
@@ -12,7 +12,7 @@ export default {
     },
     data() {
         return {
-            msg: 'Hello world!',
+            update: 0,
             gameInModal: { id: "", name: "", price: "" }
         }
     },
@@ -21,6 +21,10 @@ export default {
             this.gameInModal = game
             let gameInfoModal = new bootstrap.Modal(document.getElementById("gameInfoModal"))
             gameInfoModal.show()
+        },
+        updateView(game) {
+            this.update++
+            this.gameInModal = game
         }
     }
 }

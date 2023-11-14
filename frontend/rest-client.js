@@ -1,28 +1,5 @@
 import { createApp } from 'vue'
-import ChildComp from './ChildComp.js'
-import App from './components/App.js'
+import App from './App.js'
 const app = createApp(App)
-createApp({
-    components: {
-        ChildComp
-    },
-    data() {
-        return {
-            gameInModal: { id: null, name: null, price: null },
-            games: [],
-            childMsg: 'No child msg yet'
-        }
-    },
-    async created() {
-        this.games = await (await fetch("http://localhost:8080/games")).json()
-    },
-    methods: {
-        getGame: async function (id) {
-            this.gameInModal = await (await fetch("http://localhost:8080/games/" + id)).json()
-            let gameInfoModal = new bootstrap.Modal(document.getElementById("gameInfoModal"))
-            gameInfoModal.show()
-        }
-    }
-})
-
+app.config.globalProperties.API_URL = 'http://localhost:8080'
 app.mount('#app')
