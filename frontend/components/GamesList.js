@@ -2,14 +2,18 @@ export default {
     /*html*/
     template: `
     <table id="gamesTable" class="table table-striped table-bordered">
-        <tr>
-            <th>Name</th>
-            <th>Price</th>
-        </tr>
-        <tr v-for="game in games">
-            <td @click="getGame(game.id)">{{ game.name }}</td>
-            <td>{{ game.price }}</td>
-        </tr>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Price</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr v-for="game in games">
+                <td @click="getGame(game.id)">{{ game.name }}</td>
+                <td>{{ game.price }}</td>
+            </tr>
+        </tbody>
     </table>
     `,
     emits: ["showModal"],
