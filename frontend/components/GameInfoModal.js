@@ -1,3 +1,4 @@
+import confirmationModal from "./ConfirmationModal.js"
 export default {
     /*html*/
     template: `
@@ -26,19 +27,35 @@ export default {
                 </table>
             </div>
             <div class="modal-footer">
-                <template v-if="isEditing">
-                    <button type="button" class="btn btn-success" @click="saveModifiedGame">Save</button>
-                    <button type="button" class="btn btn-secondary" @click="cancelEditing">Cancel</button>
-                </template>
-                <template v-else>
-                    <button type="button" class="btn btn-warning" @click="startEditing">Edit</button>
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                </template>
+                <div class="container">
+                    <div class="row">
+                        <template v-if="isEditing">
+                            <div class="col me-auto">
+                                <button type="button" class="btn btn-danger" data-bs-target="#confirmationModal" data-bs-toggle="modal">Delete</button>
+                            </div>
+                            <div class="col-auto">
+                                <button type="button" class="btn btn-success mx-2" @click="saveModifiedGame">Save</button>
+                                <button type="button" class="btn btn-secondary" @click="cancelEditing">Cancel</button>
+                            </div>
+                        </template>
+                        <template v-else>
+                            <div class="col me-auto"></div>
+                            <div class="col-auto">
+                                <button type="button" class="btn btn-warning mx-2" @click="startEditing">Edit</button>
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            </div>
+                        </template>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 </div>
+<confirmation-modal :target="'#gameInfoModal'" @confirmed="deleteGame"></confirmation-modal>
     `,
+    components: {
+        confirmationModal
+    },
     emits: ["gameUpdated"],
     props: {
         gameInModal: {}
@@ -70,6 +87,9 @@ export default {
             console.log(rawResponse);
             this.$emit("gameUpdated", this.modifiedGame)
             this.isEditing = false
+        },
+        deleteGame() {
+            console.log("DELETE confirmed");
         }
     }
 }
