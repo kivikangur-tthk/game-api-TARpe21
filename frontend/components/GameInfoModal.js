@@ -1,4 +1,6 @@
 import confirmationModal from "./ConfirmationModal.js"
+import gameForm from "./game/GameForm.js"
+import gameDetails from "./game/GameDetails.js"
 export default {
     /*html*/
     template: `
@@ -9,22 +11,8 @@ export default {
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <table class="table table-striped">
-                    <tr>
-                        <th>Id</th>
-                        <td>{{gameInModal.id}}</td>
-                    </tr>
-                    <tr>
-                        <th>Name</th>
-                        <td v-if="isEditing"><input v-model="modifiedGame.name"></td>
-                        <td v-else>{{gameInModal.name}}</td>
-                    </tr>
-                    <tr>
-                        <th>Price</th>
-                        <td v-if="isEditing"><input v-model="modifiedGame.price"></td>
-                        <td v-else>{{gameInModal.price}}</td>
-                    </tr>
-                </table>
+                <game-form v-if="isEditing" v-model:id="modifiedGame.id" v-model:name="modifiedGame.name" v-model:price="modifiedGame.price" ></game-form>
+                <game-details v-else :gameInModal="gameInModal"></game-details>
             </div>
             <div class="modal-footer">
                 <div class="container">
@@ -54,7 +42,9 @@ export default {
 <confirmation-modal :target="'#gameInfoModal'" @confirmed="deleteGame"></confirmation-modal>
     `,
     components: {
-        confirmationModal
+        confirmationModal,
+        gameForm,
+        gameDetails
     },
     emits: ["gameUpdated"],
     props: {
