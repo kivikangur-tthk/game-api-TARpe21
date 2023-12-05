@@ -25,6 +25,9 @@ export default {
     async created() {
         this.games = await (await fetch("http://localhost:8080/games")).json()
     },
+    // async beforeUpdate() {
+    //     this.games = await (await fetch("http://localhost:8080/games")).json()
+    // },
     methods: {
         getGame: async function (id) {
             const gameInModal = await (await fetch(this.API_URL + "/games/" + id)).json()
